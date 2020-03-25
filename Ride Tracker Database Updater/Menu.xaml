@@ -1,0 +1,40 @@
+﻿<Window x:Class="Ride_Tracker_Database_Updater.Menu"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Ride_Tracker_Database_Updater"  WindowStartupLocation="CenterScreen"
+        mc:Ignorable="d" Title="Menu"  Background="Black" Height="600" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="20"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
+
+        <Label Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Width="400" HorizontalAlignment="Left" Content="Main Menu"
+                FontWeight="Bold" FontSize="25" Margin="10,10,0,10"/>
+       
+        
+            <Label Grid.Row="2" Grid.Column="1" Width="Auto" Content="Chapter Maintenance: " Margin="15,10,14,10"/>
+            <Button Grid.Row="2" Grid.Column="2" Click="AddChapter_Click"   HorizontalAlignment="Right"  Margin="15,10,14,10">Create New</Button>
+            <Button Grid.Row="2" Grid.Column="3" Click="UpdateChapter_Click"  HorizontalAlignment="Right"  Margin="15,10,14,10">Update Existing</Button>
+        
+            <Label Grid.Row="3" Grid.Column="1" Width="Auto" Content="Chapter List and Link Tester: " Margin="15,10,14,10"/>
+            <Button Grid.Row="3" Grid.Column="2" Click="ViewChapter_Click"   HorizontalAlignment="Right"  Margin="15,10,14,10">View Chapter List</Button>
+
+            <Label Grid.Row="4" Grid.Column="1" Width="Auto" Content="Chapter List and Link Tester: " Margin="15,10,14,10"/>
+            <Button Grid.Row="4" Grid.Column="2" Click="ViewMiles_Click" Margin="15,10,14,10">Update Miles Table</Button>
+
+    </Grid>
+</Window>

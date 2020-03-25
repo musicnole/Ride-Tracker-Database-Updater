@@ -1,0 +1,93 @@
+﻿<Window x:Class="Ride_Tracker_Database_Updater.ChapterCU"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Ride_Tracker_Database_Updater"
+        xmlns:localModel="clr-namespace:Ride_Tracker_Database_Updater.Model"
+        mc:Ignorable="d" Background="Black"  WindowStartupLocation="CenterScreen"
+        Title="ChapterCU"  Height="600" Width="800">
+    <Window.DataContext>
+        <localModel:ChapterAddress/>
+    </Window.DataContext>
+
+    <Grid ShowGridLines="False" >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="20"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
+
+        <Label Grid.Row="1" Grid.Column="1" x:Name="lblMode" Grid.ColumnSpan="2" Width="400" HorizontalAlignment="Left" Content="Chapter"
+                FontWeight="Bold" FontSize="25" Margin="10,10,0,10"/>
+
+        <Label Grid.Row="2" Grid.Column="1" Width="Auto" Content="Chapter:" Margin="15,10,14,10"/>
+        <TextBox x:Name="txtChapter" Grid.Row="2" Grid.Column="2" Width="Auto" />
+        <ComboBox x:Name="cboChapter"  Width="250" SelectionChanged="cboChapter_SelectionChanged" SelectedValuePath="Key" 
+                  Grid.Row="2" DisplayMemberPath="Value" 
+                  Grid.Column="2" 
+                  Grid.ColumnSpan="2" Margin="0,9,0,10">
+        </ComboBox>
+
+        <Label Grid.Row="3" Grid.Column="1" Width="Auto" Content="Chapter Nickname" Margin="15,10,14,10"/>
+        <TextBox x:Name="txtChapterNN" Grid.Row="3" Grid.Column="2" Width="Auto" />
+        
+        
+        <Label Grid.Row="4" Grid.Column="1" Width="Auto" Content="Street Address Line:" Margin="15,10,14,10"/>
+        <TextBox Grid.Row="4" Grid.Column="2" x:Name="txtStreetAddr1" 
+                 Text="{Binding StreetAddress1, ValidatesOnDataErrors=True,
+                UpdateSourceTrigger=PropertyChanged}"
+                 ToolTip="{Binding ErrorCollection[StreetAddress1]}"/>
+
+
+        <!--<Label Grid.Row="4" Grid.Column="1" Width="Auto" Content="Street Address Line2:" Margin="15,10,14,10"/>
+        <TextBox Grid.Row="4" Grid.Column="2" x:Name="txtStreetAddr2">
+        </TextBox>-->
+
+        <Label Grid.Row="5" Grid.Column="1" Width="Auto" Content="City" Margin="15,10,14,10"/>
+        <TextBox Grid.Row="5" Grid.Column="2" x:Name="txtCity" Text="{Binding City, ValidatesOnDataErrors=True,
+                UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding ErrorCollection[City]}"/>
+
+        <RichTextBox x:Name="errListChapterAddr" Grid.Column="3" Grid.Row="2" Grid.RowSpan="5" Width="225" Margin="35" 
+                     Background="Black" Foreground="Red" FontSize="15" HorizontalAlignment="Left" 
+                      BorderBrush="Red" Visibility="Hidden" >
+            <FlowDocument>
+            </FlowDocument>
+        </RichTextBox>
+
+        <Label Grid.Row="7" Grid.Column="1" Width="Auto" Content="Select State:" Margin="15,10,14,10"/>
+        <ComboBox x:Name="cboState"  Width="250" SelectionChanged="cboState_SelectionChanged" SelectedValuePath="Key" 
+                  Grid.Row="7"  DisplayMemberPath="Value" Grid.Column="2" Grid.ColumnSpan="2">
+        </ComboBox>
+
+        <Label Grid.Row="8" Grid.Column="1" Width="Auto" Content="Zip" Margin="15,10,14,10"/>
+        <TextBox Grid.Row="8" Grid.Column="2" x:Name="txtZip" Text="{Binding Zip, ValidatesOnDataErrors=True,
+                UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding ErrorCollection[Zip]}"/>
+
+        <Label Grid.Row="9" Grid.Column="1" Width="Auto" Content="Google Link" Margin="15,10,14,10"/>
+        <TextBox Grid.Row="9" Grid.Column="2" Grid.ColumnSpan="2" IsReadOnly="True" Width="450"  Height="Auto" HorizontalAlignment="Left"  Name="txtGlink" 
+                  TextWrapping="Wrap"/>
+
+        <Button Grid.Row="10"  Grid.Column="1" x:Name="btnChapter" Click="Chapter_Click"  HorizontalAlignment="Right" Margin="0,10,10,10">Chapter</Button>
+        <Button Grid.Row="10" Grid.Column="2" x:Name="btnTestChapterURL"  Click="TestChapterURL_Click"  HorizontalAlignment="Right"  Margin="15,10,20,10">Test Google URL</Button>
+        <Button Grid.Row="10"  Grid.Column="3" x:Name="btnMenu" Click="btnMenu_Click"  HorizontalAlignment="Right" Margin="0,10,10,10">Main Menu</Button>
+
+    </Grid>
+</Window>

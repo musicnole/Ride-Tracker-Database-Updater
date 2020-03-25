@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="RideTracker" Class="ChapterClassDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=DESKTOP-KN7D6U9;Initial Catalog=RideTracker;Integrated Security=True" SettingsObjectName="Ride_Tracker_Database_Updater.Properties.Settings" SettingsPropertyName="RideTrackerConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Chapters" Member="Chapters">
+    <Type Name="Chapter">
+      <Column Name="ChapterId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ChapterName" Type="System.String" DbType="VarChar(250)" CanBeNull="true" />
+      <Column Name="ChapterNickName" Type="System.String" DbType="VarChar(150)" CanBeNull="true" />
+      <Column Name="ClubHouseAddressID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="DateModified" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="DateCreated" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="GoogleLink" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="Active" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+    </Type>
+  </Table>
+</Database>

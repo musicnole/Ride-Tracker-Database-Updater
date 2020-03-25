@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="Miles">
+  <DataContextMoniker Name="/MilesDataContext" />
+  <nestedChildShapes>
+    <classShape Id="ef0e06bc-9fa3-4d94-880e-80bfc1bd309b" absoluteBounds="7.125, 3.625, 2, 2.3478011067708335">
+      <DataClassMoniker Name="/MilesDataContext/Mile" />
+      <nestedChildShapes>
+        <elementListCompartment Id="79d48d07-eeb8-422f-b23d-9a0645b93a4d" absoluteBounds="7.14, 4.085, 1.9700000000000002, 1.7878011067708335" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

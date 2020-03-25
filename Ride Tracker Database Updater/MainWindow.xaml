@@ -1,0 +1,76 @@
+﻿<Window x:Class="Ride_Tracker_Database_Updater.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Ride_Tracker_Database_Updater"
+        mc:Ignorable="d"  MinWidth="250"  WindowStartupLocation="CenterScreen"
+        Title="Ride Tracker Db Updater Update Chapter Google Links"   Height="900" 
+         Background="Black">
+    
+    <Window.CommandBindings>
+        <CommandBinding Command="NavigationCommands.BrowseBack" CanExecute="BrowseBack_CanExecute" Executed="BrowseBack_Executed" />
+        <CommandBinding Command="NavigationCommands.BrowseForward" CanExecute="BrowseForward_CanExecute" Executed="BrowseForward_Executed" />
+        <CommandBinding Command="NavigationCommands.GoToPage" CanExecute="GoToPage_CanExecute" Executed="GoToPage_Executed" />
+    </Window.CommandBindings>
+    
+    <Window.Resources>
+  
+    </Window.Resources>
+
+    <ScrollViewer>
+        <StackPanel>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="20"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="20"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4">
+                    <DataGrid x:Name="dgChapters" AutoGenerateColumns="False" CanUserAddRows="False" Margin="5" Width="Auto"  ItemsSource="{Binding chList}" SelectionChanged="dgChapters_SelectionChanged" >
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding ChapterName}" Header="Chapter Name" Width="*"/>
+                            <DataGridTextColumn Binding="{Binding ChapterNickName}" Header="Chapter Nick Name" Width="*"/>
+                            <DataGridTextColumn Binding="{Binding GoogleLink}" Header="Google Link" Width="*" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                   </StackPanel>
+                <Button Grid.Row="2" Grid.Column="3" Click="UpdateChapterAddress"  HorizontalAlignment="Right">Update 1 Chapters</Button>
+                <Button Grid.Row="2" Grid.Column="4" Click="UpdateChapterGoDaddyLink"  HorizontalAlignment="Right">Update All Chapters</Button>
+                <DockPanel Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="5" Width="Auto" Background="Black" >
+                    <ToolBar DockPanel.Dock="Top" Background="Black" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <Button Command="NavigationCommands.BrowseBack">
+                            <Image Source="/Images/circled-chevron-left-purple.png" Height="50" />
+                        </Button>
+                        <Button Command="NavigationCommands.BrowseForward">
+                            <Image Source="/Images/circled-chevron-right-purple.png"  Height="50"  />
+                        </Button>
+                        <TextBox Name="txtUrl" Width="500"  VerticalAlignment="Center" HorizontalAlignment="Center" KeyUp="txtUrl_KeyUp" />
+                        <Button Command="NavigationCommands.GoToPage" HorizontalAlignment="Right">
+                            <Image Source="/Images/world.png"  Height="50" />
+                        </Button>
+                    </ToolBar>
+                    <WebBrowser Grid.Row="4" Width="Auto" 
+                                Grid.Column="1" Grid.ColumnSpan="4" 
+                                x:Name="TripBrowser"  Source="https://www.google.com" 
+                                LoadCompleted="TripBrowser_LoadCompleted"
+                                Height="400" Margin="0,0,20,5"/>
+                </DockPanel>
+                <Button Grid.Row="4"  Grid.Column="4" x:Name="btnMenu" Click="btnMenu_Click"  HorizontalAlignment="Right" Margin="0,10,10,15">Main Menu</Button>
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
+</Window>
