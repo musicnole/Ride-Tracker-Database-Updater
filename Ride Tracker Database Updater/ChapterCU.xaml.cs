@@ -92,9 +92,26 @@ namespace Ride_Tracker_Database_Updater
                 if(newChKey!=0)
                 {
                     CreateChapterAddress(newChKey);
+                    CreateChapterMiles(newChKey);
                 }
             }
         }
+
+        private void CreateChapterMiles(int newChKey)
+        {
+            List<int> chAddList = new List<int>();
+            chAddList.Add(newChKey);
+            try
+            {
+                Helper.Helper.AddChapterToMilesTable(chAddList);
+            }
+            catch (Exception exceptCM)
+            {
+
+                MessageBox.Show(exceptCM.ToString());
+            }
+        }
+
         private void CreateChapterAddress(int chID)
         {
             int newChaKey = 0;
@@ -138,10 +155,10 @@ namespace Ride_Tracker_Database_Updater
             btnChapter.Content = string.Concat(_modeUpdate, " Chapter");
         }
 
-        private void UpdateChapterAddressInfo()
+        private bool UpdateChapterAddressInfo(bool updateSuccess)
         {
             bool validForm;
-            bool updateSuccess = true;
+           
             string chapterName = string.Empty;
             string newGLink = string.Empty;
 
@@ -190,16 +207,14 @@ namespace Ride_Tracker_Database_Updater
                     MessageBox.Show(exceptCh.Message.ToString());
                     updateSuccess = false;
                 }
-
-                if (updateSuccess)
-                    MessageBox.Show(string.Concat(_successMsg, chapterName));
             }
+            return updateSuccess;
         }
 
-        private void UpdateChapterInfo()
+        private bool UpdateChapterInfo(bool updateSuccess)
         {
             bool validForm;
-            bool updateSuccess = true;
+            //bool updateSuccess = true;
             string newGLink = string.Empty;
             int chID = Convert.ToInt32(cboChapter.SelectedValue);
             RefreshErrorBlock();
@@ -228,8 +243,50 @@ namespace Ride_Tracker_Database_Updater
                     updateSuccess = false;
                 }
             }
-        }
 
+            return updateSuccess;
+        }
+        
+        private void UpdateChapterMiles(bool updateSuccess)
+        {
+             
+            int chID = Convert.ToInt32(cboChapter.SelectedValue);
+            //Check and see if the chapter in the miles table
+            //Check the To and From ChapterId
+            try
+            {
+                MilesDataContext mdc = new MilesDataContext();
+                int chFromCount = (from c in mdc.Miles
+                                   where c.FromId == chID || c.ToId == chID
+                                   select c).Count();
+                //if the count = 0 first add the missing miles records
+                if (chFromCount == 0)
+                {
+                    CreateChapterMiles(chID);
+                }
+                // Update the to and from for the selected chapter
+                //Get All the Chapter Addresses into a List
+                List<DAL.ChapterAddress> caList = new List<DAL.ChapterAddress>();
+                caList = Helper.Helper.GetChapterAddressesAll();
+
+                // Create the List of clubhouse addresses
+                Dictionary<int, string> chList = new Dictionary<int, string>();
+            List<int> chAddList = new List<int>();
+                chList = Helper.Helper.GetChapters();
+                List<Model.ChapterAddressMiles> camList = new List<Model.ChapterAddressMiles>();
+                camList = Helper.Helper.CreateClubhouseAddressList(chList, caList);
+                Helper.Helper.CreateChapterMilesUpdateLists(caList, camList);
+                //Update the google uri for the new chapter
+                Helper.Helper.UpdateGoogleUrl();
+            }
+            catch (Exception exMiles)
+            {
+                MessageBox.Show(exMiles.Message.ToString());
+                updateSuccess = false;
+            }
+            if (updateSuccess)
+                MessageBox.Show(string.Concat(_successMsg, cboChapter.Text.ToString()));
+        }
 
         private void cboState_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -393,8 +450,11 @@ namespace Ride_Tracker_Database_Updater
                     break;
 
                 case _modeUpdate:
-                    UpdateChapterInfo();
-                    UpdateChapterAddressInfo();
+                    bool updateSuccess = true;
+                    updateSuccess = UpdateChapterInfo(updateSuccess);
+                    if (updateSuccess) updateSuccess = UpdateChapterAddressInfo(updateSuccess);
+                    if (updateSuccess) UpdateChapterMiles(updateSuccess);
+                    
                     break;
 
             }
