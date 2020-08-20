@@ -63,8 +63,8 @@
                 
                 
                 
-                <Button Grid.Row="3"  Grid.Column="1" x:Name="btnUpdateMiles" Click="btnUpdateMilesTable_Click"  HorizontalAlignment="Right" Margin="0,10,10,15">Update Miles In Table</Button>
-                <Button Grid.Row="3"  Grid.Column="3" x:Name="btnUpdateGoogleUri" Click="btnUpdateGoogleUri_Click"  HorizontalAlignment="Right" Margin="0,10,10,15">Update Google Uri in Table</Button>
+                <Button Grid.Row="3"  Grid.Column="1" x:Name="btnUpdateMiles" Click="btnUpdateMilesTable_Click"  HorizontalAlignment="Right" Margin="0,10,10,15">Update Miles</Button>
+                <Button Grid.Row="3"  Grid.Column="3" x:Name="btnUpdateGoogleUri" Click="btnUpdateGoogleUri_Click"  HorizontalAlignment="Right" Margin="0,10,10,15">Update Google Uri</Button>
                 <Button Grid.Row="3"  Grid.Column="4" x:Name="btnMenu" Click="btnMenu_Click"  HorizontalAlignment="Right" Margin="0,10,10,15">Main Menu</Button>
                 <DockPanel Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="5" Width="Auto" Background="Black" >
                     <ToolBar DockPanel.Dock="Top" Background="Black" VerticalAlignment="Center" HorizontalAlignment="Center">

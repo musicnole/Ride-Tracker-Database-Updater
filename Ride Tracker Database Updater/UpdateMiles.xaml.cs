@@ -1,19 +1,11 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Ride_Tracker_Database_Updater.DAL;
 using Ride_Tracker_Database_Updater.Model;
 
@@ -28,7 +20,8 @@ namespace Ride_Tracker_Database_Updater
         public UpdateMiles()
         {
             InitializeComponent();
-            MilesTableCount= CheckMilesTableCount();
+
+            MilesTableCount = CheckMilesTableCount();
             if (MilesTableCount > 0)
             {
                 GetMilesTable();
@@ -63,6 +56,7 @@ namespace Ride_Tracker_Database_Updater
             {
                 cm.ToChapter = chList.Single(x => x.Key == cm.ToId).Value;
                 cm.FromChapter = chList.Single(x => x.Key == cm.FromID).Value;
+                cm.FromChapter = chList.Single(x => x.Key == cm.FromID).Value;
             }
             dgChapterMiles.ItemsSource = lcm;
         }
@@ -82,43 +76,44 @@ namespace Ride_Tracker_Database_Updater
 
      
         /// <summary>
+        /// MOVED TO HELPER SO CAN BE USED BY CREATE CHAPTER AS WELL
         /// This Method will add the chapters that do not exist in the Miles table to the miles table
         /// </summary>
         /// <param name="chAddList"></param>
-        private void AddChapterToMilesTable(List<int> chAddList, Dictionary<int, string> chList)
-        {
-            using(MilesDataContext mdc =  new MilesDataContext())
-            {
-                // Loop through the Add list and then the list of current chapters to create the Mile
-                foreach (int chId in chAddList)
-                {
-                    foreach (var ch in chList)
-                    {
-                        if (chId != ch.Key)
-                        {
-                            Mile mAdd = new Mile();
-                            mAdd.FromId = chId;
-                            mAdd.ToId = ch.Key;
-                            mAdd.Active = true;
-                            mAdd.DateCreated = System.DateTime.Now;
-                            mAdd.DateModified = System.DateTime.Now;
-                            mdc.Miles.InsertOnSubmit(mAdd);
-                        }
+        //private void AddChapterToMilesTable(List<int> chAddList, Dictionary<int, string> chList)
+        //{
+        //    using(MilesDataContext mdc =  new MilesDataContext())
+        //    {
+        //        // Loop through the Add list and then the list of current chapters to create the Mile
+        //        foreach (int chId in chAddList)
+        //        {
+        //            foreach (var ch in chList)
+        //            {
+        //                if (chId != ch.Key)
+        //                {
+        //                    Mile mAdd = new Mile();
+        //                    mAdd.FromId = chId;
+        //                    mAdd.ToId = ch.Key;
+        //                    mAdd.Active = true;
+        //                    mAdd.DateCreated = System.DateTime.Now;
+        //                    mAdd.DateModified = System.DateTime.Now;
+        //                    mdc.Miles.InsertOnSubmit(mAdd);
+        //                }
 
-                    }
-                }
+        //            }
+        //        }
                 
-                try
-                {
-                    mdc.SubmitChanges();
-                }
-                catch (Exception exceptAdd)
-                {
-                    MessageBox.Show(exceptAdd.Message.ToString());
-                }
-            }
+        //        try
+        //        {
+        //            mdc.SubmitChanges();
+        //        }
+        //        catch (Exception exceptAdd)
+        //        {
+        //            MessageBox.Show(exceptAdd.Message.ToString());
+        //        }
+        //    }
 
-        }
+        //}
         
         /// <summary>
         /// This Method Looks at the Miles Table, Gets a disticnt list of Chapters in the From Id column
@@ -152,93 +147,40 @@ namespace Ride_Tracker_Database_Updater
             return chAddList;
         }
         
-        /// <summary>
-        /// Method that updates the miles in the miles table
-        /// </summary>
-        /// <param name="originKey"></param>
-        /// <param name="lookupOrigin"></param>
-        /// <param name="lookupDestinationDict"></param>
-        private void UpdateMileage(int originKey, string lookupOrigin, Dictionary<int, string> lookupDestinationDict)
-        {
-            int destKey = 0;
-            bool updateAll = UpdateAll.IsChecked.Value;
-            using (var mdc = new MilesDataContext())
-            {
-                foreach (var dest in lookupDestinationDict)
-                {
-                    destKey = dest.Key;
-                    if (updateAll)
-                    {
-                        //Get the Mile Record
-                        var mRec = from mtable in mdc.Miles
-                                   where mtable.FromId == originKey && mtable.ToId == destKey
-                                   select mtable;
-                        foreach (Mile mile in mRec)
-                        {
-                            mile.Miles = (Int32)Helper.GoogleHelper.GetMileage(lookupOrigin, dest.Value);
-                        }
-                    }
-                    else
-                    {
-                        //Get the Mile Record
-                        var mRec = from mtable in mdc.Miles
-                                   where mtable.FromId == originKey && mtable.ToId == destKey && mtable.Miles== 0
-                                   select mtable;
-                        foreach (Mile mile in mRec)
-                        {
-                            mile.Miles = (Int32)Helper.GoogleHelper.GetMileage(lookupOrigin, dest.Value);
-                        }
-                    }
-                    
-                    //Submit changes to table
-                    try
-                    {
-                        mdc.SubmitChanges();
-                    }
-                    catch (Exception exceptUpdate)
-                    {
-
-                        MessageBox.Show(exceptUpdate.Message.ToString());
-                    }
-
-                }
-            }
-        }
-
-        
-        private void UpdateGoogleMilesUri(int originKey, Dictionary<int, string> lookupDestinationDict)
-        {
-            int destKey = 0;
-            bool updateAll = UpdateAll.IsChecked.Value;
-            using (var mdc = new MilesDataContext())
-            {
-                foreach (var dest in lookupDestinationDict)
-                {
-                    destKey = dest.Key;
+        // Moved to Helper 20200819      
+        //private void UpdateGoogleMilesUri(int originKey, Dictionary<int, string> lookupDestinationDict)
+        //{
+        //    int destKey = 0;
+        //    bool updateAll = UpdateAll.IsChecked.Value;
+        //    using (var mdc = new MilesDataContext())
+        //    {
+        //        foreach (var dest in lookupDestinationDict)
+        //        {
+        //            destKey = dest.Key;
                    
-                        //Get the Mile Record
-                        var mRec = from mtable in mdc.Miles
-                                   where mtable.FromId == originKey && mtable.ToId == destKey
-                                   select mtable;
-                        foreach (Mile mile in mRec)
-                        {
-                            mile.GoogleUri = Helper.GoogleHelper.CreateGoogleMilesTableLink(originKey, mile.ToId);
-                        }
+        //                //Get the Mile Record
+        //                var mRec = from mtable in mdc.Miles
+        //                           where mtable.FromId == originKey && mtable.ToId == destKey
+        //                           select mtable;
+        //                foreach (Mile mile in mRec)
+        //                {
+        //                    mile.GoogleUri = Helper.GoogleHelper.CreateGoogleMilesTableLink(originKey, mile.ToId);
+        //                }
 
-                    //Submit changes to table
-                    try
-                    {
-                        mdc.SubmitChanges();
-                    }
-                    catch (Exception exceptUpdate)
-                    {
+        //            //Submit changes to table
+        //            try
+        //            {
+        //                mdc.SubmitChanges();
+        //            }
+        //            catch (Exception exceptUpdate)
+        //            {
 
-                        MessageBox.Show(exceptUpdate.Message.ToString());
-                    }
+        //                MessageBox.Show(exceptUpdate.Message.ToString());
+        //            }
 
-                }
-            }
-        }
+        //        }
+        //    }
+        //}
 
         /// <summary>
         /// If do not want to update the whole table then only update where miles =  0
@@ -260,57 +202,59 @@ namespace Ride_Tracker_Database_Updater
 
         /// <summary>
         /// Used by the update button to get all the destination addresses
+        /// 20200819 Moved to helper
         /// </summary>
         /// <param name="chIdOrigin"></param>
         /// <param name="caList"></param>
         /// <returns></returns>
-        private Dictionary<int,string> CreateDestinationAddressList(int chIdOrigin, List<DAL.ChapterAddress> caList)
-        {
-            Dictionary<int, string> lookupDestinationList = new Dictionary<int, string>();
-            StringBuilder sblookupDestination = new StringBuilder();
-            string lookupDestination = string.Empty;
+        //private Dictionary<int,string> CreateDestinationAddressList(int chIdOrigin, List<DAL.ChapterAddress> caList)
+        //{
+        //    Dictionary<int, string> lookupDestinationList = new Dictionary<int, string>();
+        //    StringBuilder sblookupDestination = new StringBuilder();
+        //    string lookupDestination = string.Empty;
 
-            foreach (DAL.ChapterAddress ca in caList)
-            {
-                lookupDestination = string.Empty;
-                //Make sure not to put the origin chapter into this address list
-                if (ca.ChapterId != chIdOrigin)
-                {
-                    sblookupDestination.Append(ca.StreetAddress1);
-                    sblookupDestination.Append(" ");
-                    sblookupDestination.Append(ca.City);
-                    sblookupDestination.Append(" ");
-                    sblookupDestination.Append(Helper.Helper.GetStateCode((Int32)ca.StateId));
-                    sblookupDestination.Append(" ");
-                    sblookupDestination.Append(ca.Zip);
-                    lookupDestination = sblookupDestination.ToString();
-                }
-                else continue;
-                lookupDestinationList.Add(ca.ChapterId,lookupDestination);
-                sblookupDestination.Clear();
-            }
-            return lookupDestinationList;
-        }
+        //    foreach (DAL.ChapterAddress ca in caList)
+        //    {
+        //        lookupDestination = string.Empty;
+        //        //Make sure not to put the origin chapter into this address list
+        //        if (ca.ChapterId != chIdOrigin)
+        //        {
+        //            sblookupDestination.Append(ca.StreetAddress1);
+        //            sblookupDestination.Append(" ");
+        //            sblookupDestination.Append(ca.City);
+        //            sblookupDestination.Append(" ");
+        //            sblookupDestination.Append(Helper.Helper.GetStateCode((Int32)ca.StateId));
+        //            sblookupDestination.Append(" ");
+        //            sblookupDestination.Append(ca.Zip);
+        //            lookupDestination = sblookupDestination.ToString();
+        //        }
+        //        else continue;
+        //        lookupDestinationList.Add(ca.ChapterId,lookupDestination);
+        //        sblookupDestination.Clear();
+        //    }
+        //    return lookupDestinationList;
+        //}
 
-        private static List<ChapterAddressMiles> CreateClubhouseAddressList(Dictionary<int, string> chList, List<DAL.ChapterAddress> caList)
-        {
-            //Create a list of Clubhouses and address 
-            List<ChapterAddressMiles> camList = new List<ChapterAddressMiles>();
-            //Add Clubhouse and the addresses
-            foreach (var ch in chList)
-            {
-                ChapterAddressMiles cam = new ChapterAddressMiles();
-                cam.ChapterID = ch.Key;
-                cam.ChapterName = ch.Value;
-                cam.ClubhouseAddressID = (from addr in caList where ch.Key == addr.ChapterId select addr.ChapterAddressId).FirstOrDefault();
-                cam.StreetAddress = (from addr in caList where ch.Key == addr.ChapterId select addr.StreetAddress1).FirstOrDefault();
-                cam.City = (from addr in caList where ch.Key == addr.ChapterId select addr.City).FirstOrDefault();
-                cam.stateId = (Int32)(from addr in caList where ch.Key == addr.ChapterId select addr.StateId).FirstOrDefault();
-                cam.Zip = (from addr in caList where ch.Key == addr.ChapterId select addr.Zip).FirstOrDefault();
-                camList.Add(cam);
-            }
-            return camList;
-        }
+
+        //private static List<ChapterAddressMiles> CreateClubhouseAddressList(Dictionary<int, string> chList, List<DAL.ChapterAddress> caList)
+        //{
+        //    //Create a list of Clubhouses and address 
+        //    List<ChapterAddressMiles> camList = new List<ChapterAddressMiles>();
+        //    //Add Clubhouse and the addresses
+        //    foreach (var ch in chList)
+        //    {
+        //        ChapterAddressMiles cam = new ChapterAddressMiles();
+        //        cam.ChapterID = ch.Key;
+        //        cam.ChapterName = ch.Value;
+        //        cam.ClubhouseAddressID = (from addr in caList where ch.Key == addr.ChapterId select addr.ChapterAddressId).FirstOrDefault();
+        //        cam.StreetAddress = (from addr in caList where ch.Key == addr.ChapterId select addr.StreetAddress1).FirstOrDefault();
+        //        cam.City = (from addr in caList where ch.Key == addr.ChapterId select addr.City).FirstOrDefault();
+        //        cam.stateId = (Int32)(from addr in caList where ch.Key == addr.ChapterId select addr.StateId).FirstOrDefault();
+        //        cam.Zip = (from addr in caList where ch.Key == addr.ChapterId select addr.Zip).FirstOrDefault();
+        //        camList.Add(cam);
+        //    }
+        //    return camList;
+        //}
 
 
         private void UpdateMilesTable()
@@ -326,95 +270,106 @@ namespace Ride_Tracker_Database_Updater
 
             // Create the List of clubhouse addresses
             List<ChapterAddressMiles> camList = new List<ChapterAddressMiles>();
-            camList = CreateClubhouseAddressList(chList, caList);
+            camList =Helper.Helper.CreateClubhouseAddressList(chList, caList);
 
             //Get a list of chapters that are not in the Miles Table, will need to insert instead of update
             chAddList = GetChapterToAddList();
             if (chAddList.Count > 0)
             {
-                AddChapterToMilesTable(chAddList, chList);
+                //New AddChapterToMilesTable method because put into Helper Class
+                //Helper.Helper.AddChapterToMilesTable(chAddList, chList);
+                Helper.Helper.AddChapterToMilesTable(chAddList);
+
             }
 
-            StringBuilder sblookupOrigin = new StringBuilder();
-            string lookupOrigin = string.Empty;
-            Dictionary<int, string> lookupDestinationDict = new Dictionary<int, string>();
-            string test = string.Empty;
-            //Get Mileage, Loop through list of Chapters to set Origin Address
-            foreach (ChapterAddressMiles cam in camList)
-            {
-                //Create Origin
-                sblookupOrigin.Append(cam.StreetAddress);
-                sblookupOrigin.Append(" ");
-                sblookupOrigin.Append(cam.City);
-                sblookupOrigin.Append(" ");
-                sblookupOrigin.Append(Helper.Helper.GetStateCode(cam.stateId));
-                sblookupOrigin.Append(" ");
-                sblookupOrigin.Append(cam.Zip);
-                lookupOrigin = sblookupOrigin.ToString();
+            Helper.Helper.CreateChapterMilesUpdateLists(caList, camList);
 
-                //Just to make life easy create a list of destination addresses
-                lookupDestinationDict = CreateDestinationAddressList(cam.ChapterID, caList);
-
-                //Make the call to google to get the miles between addresses The original address is being sent and a list of all addresses 
-                // The update Mileage method will update all miles for 1 origin address
-                UpdateMileage(cam.ChapterID, lookupOrigin, lookupDestinationDict);
-
-                ////Update the Miles table Google uri
-                //UpdateGoogleMilesUri(cam.ChapterID, lookupDestinationDict);
-
-                sblookupOrigin.Clear();
-                lookupOrigin = string.Empty;
-            }
-
-            MessageBox.Show("Miles Update Complete");
+            System.Windows.MessageBox.Show("Miles Update Complete");
             GetMilesTable();
         }
+        
+        //Moved to Helper 20200819
+        //private void CreateChapterMilesUpdateLists(List<DAL.ChapterAddress> caList, List<ChapterAddressMiles> camList)
+        //{
+        //    StringBuilder sblookupOrigin = new StringBuilder();
+        //    string lookupOrigin = string.Empty;
+        //    Dictionary<int, string> lookupDestinationDict = new Dictionary<int, string>();
+        //    string test = string.Empty;
+        //    //Get Mileage, Loop through list of Chapters to set Origin Address
+        //    foreach (ChapterAddressMiles cam in camList)
+        //    {
+        //        //Create Origin
+        //        sblookupOrigin.Append(cam.StreetAddress);
+        //        sblookupOrigin.Append(" ");
+        //        sblookupOrigin.Append(cam.City);
+        //        sblookupOrigin.Append(" ");
+        //        sblookupOrigin.Append(Helper.Helper.GetStateCode(cam.stateId));
+        //        sblookupOrigin.Append(" ");
+        //        sblookupOrigin.Append(cam.Zip);
+        //        lookupOrigin = sblookupOrigin.ToString();
 
-        private void UpdateGoogleUrl()
-        {
-            //Get all The Chapters into a List
-            Dictionary<int, string> chList = new Dictionary<int, string>();
-            List<int> chAddList = new List<int>();
-            chList = Helper.Helper.GetChapters();
+        //        //Just to make life easy create a list of destination addresses
+        //        lookupDestinationDict = CreateDestinationAddressList(cam.ChapterID, caList);
 
-            //Get All the Chapter Addresses into a List
-            List<DAL.ChapterAddress> caList = new List<DAL.ChapterAddress>();
-            caList = Helper.Helper.GetChapterAddressesAll();
+        //        //Make the call to google to get the miles between addresses The original address is being sent and a list of all addresses 
+        //        // The update Mileage method will update all miles for 1 origin address
+        //        // 20200819 Moved to helper so can update miles when creating a chapter
+        //        bool updateAll = UpdateAll.IsChecked.Value;
+        //        Helper.Helper.UpdateMileage(cam.ChapterID, lookupOrigin, lookupDestinationDict, updateAll);
 
-            // Create the List of clubhouse addresses
-            List<ChapterAddressMiles> camList = new List<ChapterAddressMiles>();
-            camList = CreateClubhouseAddressList(chList, caList);
+        //        ////Update the Miles table Google uri
+        //        //UpdateGoogleMilesUri(cam.ChapterID, lookupDestinationDict);
 
-            StringBuilder sblookupOrigin = new StringBuilder();
-            string lookupOrigin = string.Empty;
-            Dictionary<int, string> lookupDestinationDict = new Dictionary<int, string>();
-            string test = string.Empty;
-            //Loop through list of Chapters to set Origin Address
-            foreach (ChapterAddressMiles cam in camList)
-            {
-                //Create Origin
-                sblookupOrigin.Append(cam.StreetAddress);
-                sblookupOrigin.Append(" ");
-                sblookupOrigin.Append(cam.City);
-                sblookupOrigin.Append(" ");
-                sblookupOrigin.Append(Helper.Helper.GetStateCode(cam.stateId));
-                sblookupOrigin.Append(" ");
-                sblookupOrigin.Append(cam.Zip);
-                lookupOrigin = sblookupOrigin.ToString();
+        //        sblookupOrigin.Clear();
+        //        lookupOrigin = string.Empty;
+        //    }
+        //}
 
-                //Just to make life easy create a list of destination addresses
-                lookupDestinationDict = CreateDestinationAddressList(cam.ChapterID, caList);
+        //private void UpdateGoogleUrl()
+        //{
+        //    //Get all The Chapters into a List
+        //    Dictionary<int, string> chList = new Dictionary<int, string>();
+        //    List<int> chAddList = new List<int>();
+        //    chList = Helper.Helper.GetChapters();
 
-                //Update the Miles table Google uri
-                UpdateGoogleMilesUri(cam.ChapterID, lookupDestinationDict);
+        //    //Get All the Chapter Addresses into a List
+        //    List<DAL.ChapterAddress> caList = new List<DAL.ChapterAddress>();
+        //    caList = Helper.Helper.GetChapterAddressesAll();
 
-                sblookupOrigin.Clear();
-                lookupOrigin = string.Empty;
-            }
+        //    // Create the List of clubhouse addresses
+        //    List<ChapterAddressMiles> camList = new List<ChapterAddressMiles>();
+        //    camList = CreateClubhouseAddressList(chList, caList);
 
-            MessageBox.Show("Miles Google Url Complete");
-            GetMilesTable();
-        }
+        //    StringBuilder sblookupOrigin = new StringBuilder();
+        //    string lookupOrigin = string.Empty;
+        //    Dictionary<int, string> lookupDestinationDict = new Dictionary<int, string>();
+        //    string test = string.Empty;
+        //    //Loop through list of Chapters to set Origin Address
+        //    foreach (ChapterAddressMiles cam in camList)
+        //    {
+        //        //Create Origin
+        //        sblookupOrigin.Append(cam.StreetAddress);
+        //        sblookupOrigin.Append(" ");
+        //        sblookupOrigin.Append(cam.City);
+        //        sblookupOrigin.Append(" ");
+        //        sblookupOrigin.Append(Helper.Helper.GetStateCode(cam.stateId));
+        //        sblookupOrigin.Append(" ");
+        //        sblookupOrigin.Append(cam.Zip);
+        //        lookupOrigin = sblookupOrigin.ToString();
+
+        //        //Just to make life easy create a list of destination addresses
+        //        lookupDestinationDict = Helper.Helper.CreateDestinationAddressList(cam.ChapterID, caList);
+
+        //        //Update the Miles table Google uri
+        //        Helper.Helper.UpdateGoogleMilesUri(cam.ChapterID, lookupDestinationDict, UpdateAll.IsChecked.Value);
+
+        //        sblookupOrigin.Clear();
+        //        lookupOrigin = string.Empty;
+        //    }
+
+        //    MessageBox.Show("Miles Google Url Complete");
+        //    GetMilesTable();
+        //}
 
         #region Button Clicks
         /// <summary>
@@ -449,7 +404,9 @@ namespace Ride_Tracker_Database_Updater
 
         private void btnUpdateGoogleUri_Click(object sender, RoutedEventArgs e)
         {
-            UpdateGoogleUrl();
+            Helper.Helper.UpdateGoogleUrl();
+            MessageBox.Show("Miles Google Url Complete");
+            GetMilesTable();
         }
 
        
