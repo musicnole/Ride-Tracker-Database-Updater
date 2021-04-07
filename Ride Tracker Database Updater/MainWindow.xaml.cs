@@ -74,8 +74,11 @@ namespace Ride_Tracker_Database_Updater
             //MessageBox.Show(ch.ChapterName.ToString());
 
             SurpressJavascriptErrors();
-            TripBrowser.Navigate(ch.GoogleLink.ToString());
-            txtUrl.Text = ch.GoogleLink.ToString();
+            string googleLink = null;
+            googleLink = ch.GoogleLink;
+            if (!string.IsNullOrEmpty(googleLink))
+            TripBrowser.Navigate(googleLink);
+            txtUrl.Text = googleLink;
         }
 
 
