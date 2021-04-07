@@ -95,7 +95,12 @@ namespace Ride_Tracker_Database_Updater.Helper
         {
             string googleuri = string.Empty;
             string stateCode = GetStateName(stateId);
-
+            streetAddress = streetAddress.Trim();
+            streetAddress = streetAddress.Replace(' ', '+');
+            streetAddress = streetAddress + ',';
+            City = City.Trim();
+            City = City.Replace(' ', '+');
+            City = City + ',';
             googleuri = gUri.Replace("{SA}", streetAddress).Replace("{City}", City).Replace("{State}", stateCode).Replace("{Zip}", Zip);
             return googleuri;
         }
